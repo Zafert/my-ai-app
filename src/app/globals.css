@@ -5,13 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +16,60 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Add tear animation styles */
+.tear-animation .left-half {
+  clip-path: polygon(0 0, 45% 0, 55% 100%, 0 100%);
+  animation: tear-left 0.5s ease-in forwards;
+}
+
+.tear-animation .right-half {
+  clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);
+  animation: tear-right 0.5s ease-in forwards;
+}
+
+@keyframes tear-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-150vw) rotate(-20deg);
+  }
+}
+
+@keyframes tear-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(150vw) rotate(20deg);
+  }
+}
+
+.tear-animation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-50%);
+  animation: tear-line 0.5s ease-in forwards;
+}
+
+@keyframes tear-line {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 0;
+  }
 }
