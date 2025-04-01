@@ -187,12 +187,13 @@ export default function Chat() {
     }
   };
 
-  // Update the close handler
-  const handleCloseCard = (messageId: string) => {
-    setSlidingMessageId({ id: messageId, direction: 'left' });
+  // Add a handler for closing saved cards
+  const handleCloseSavedCard = (messageId: string) => {
+    setSlidingMessageId({ id: messageId, direction: 'right' });
     setTimeout(() => {
-      setMessages(messages.filter(m => m.id !== messageId));
+      setMessages(prev => prev.filter(m => m.id !== messageId));
       setSlidingMessageId(null);
+      setActiveMessageId(null);
     }, 500);
   };
 
@@ -386,8 +387,8 @@ export default function Chat() {
                           {!isFromSavedCard(message.id) ? (
                             <>
                               <button 
-                                onClick={() => handleCloseCard(message.id)}
-                                className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm"
+                                onClick={() => handleCloseSavedCard(message.id)}
+                                className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm"
                               >
                                 Close
                               </button>
@@ -407,7 +408,7 @@ export default function Chat() {
                                 Delete
                               </button>
                               <button 
-                                onClick={() => setActiveMessageId(null)}
+                                onClick={() => handleCloseSavedCard(message.id)}
                                 className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm"
                               >
                                 Close
