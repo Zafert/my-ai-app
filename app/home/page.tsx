@@ -2,11 +2,14 @@
 
 import { useState } from "react"
 import styles from "./page.module.css"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import Link from 'next/link'
 
 export default function Home() {
   const [city, setCity] = useState("")
   const [weather, setWeather] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const supabase = createClientComponentClient()
 
   const getWeather = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -15,6 +18,17 @@ export default function Home() {
       const response = await fetch(`/api/weather?city=${city}`)
       const data = await response.json()
       setWeather(data)
+
+      // Save search to database
+      if (response.ok) {
+        await fetch('/api/searches', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ city }),
+        })
+      }
     } catch (error) {
       console.error(error)
     }
@@ -24,6 +38,10 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
+        <nav className={styles.nav}>
+          <Link href="/home" className={styles.activeLink}>Weather</Link>
+          <Link href="/audit" className={styles.link}>Audit Logs</Link>
+        </nav>
         <h1>Weather App</h1>
         <form onSubmit={getWeather} className={styles.form}>
           <input

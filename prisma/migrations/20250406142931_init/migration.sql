@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "WeatherSearch" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "city" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
